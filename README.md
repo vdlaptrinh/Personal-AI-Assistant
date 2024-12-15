@@ -1,5 +1,5 @@
 # Final Project - Trợ lý ảo cá nhân trên Raspberry Pi
-This project is an implementation of a voice-based AI assistant using OpenAI's google Gemini on a Raspberry Pi. The assistant listens for the wake word "Hey Siri" and then processes the user's query, providing an appropriate response.
+This project is an implementation of a voice-based AI assistant using Google Gemini on a Raspberry Pi. The assistant listens for the wake word "Hey Siri" and then processes the user's query, providing an appropriate response.
 
 ## Features
 - Wake word detection using Porcupine
