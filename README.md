@@ -9,6 +9,33 @@ This project is an implementation of a voice-based AI assistant using OpenAI's g
 - Open music
 ...
 
+
+## WM8960 Audio HAT
+BUTTON	P17	Custom buttons
+Install Driver
+Update system:
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+```
+Clone driver:
+```bash
+git clone https://github.com/waveshare/WM8960-Audio-HAT
+```
+Install WM8960 driver:
+```bash
+cd WM8960-Audio-HAT
+sudo ./install.sh 
+sudo reboot
+```
+Check if the driver is installed.
+```bash
+sudo dkms status
+```
+pi@raspberrypi:~ $ sudo dkms status 
+wm8960-soundcard, 1.0, 4.19.58-v7l+, armv7l: installed
+
+
 ## Installation
 1. Clone the repository
 ```bash
@@ -48,7 +75,35 @@ python main.py
 
 3. The assistant will process your query using Gemini and provide an appropriate response.
 
+## Auto Run
+```bash
+sudo nano /etc/systemd/system/ai_assistant.service
+```
+[Unit]
+Description=Chạy file Python tự động
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/AI-Assistant/main.py
+WorkingDirectory=/home/pi
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable ai_assistant.service
+sudo systemctl start ai_assistant.service
+sudo systemctl stop ai_assistant.service
+sudo systemctl status ai_assistant.service
+journalctl -u ai_assistant.service
+```
 ## Sample Output
+https://www.youtube.com/shorts/zOJwcwMTKwQ
 ....
 
 This project uses code from https://github.com/ivan00105/Voice-Based-AI-Assistant-with-ChatGPT-on-Raspberry-Pi
