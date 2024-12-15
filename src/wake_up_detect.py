@@ -30,7 +30,7 @@ GPIO.setup(BUTTON_WAKEUP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 #GPIO.setup(BUTTON_WAKEUP, GPIO.IN)
 
 # Cấu hình Generative AI
-genai.configure(api_key="AIzaSyBgQ5lMwIE4ERvJf0O4oeX7tQIgemftEGw")
+genai.configure(api_key="**********")
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 interrupted = False
