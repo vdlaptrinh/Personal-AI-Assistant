@@ -13,6 +13,7 @@ import RPi.GPIO as GPIO
 from src.speech_to_text import recognize_speech
 from src.text_to_speech import text_to_speech
 from src.config import porcupine_access_key
+from src.config import gemini_key
 from src.test_yt_m3u8 import download_and_play_m3u8
 #from src.pixels import Pixels
 from src.lich_lam_viec import lich_lam_viec
@@ -30,7 +31,7 @@ GPIO.setup(BUTTON_WAKEUP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 #GPIO.setup(BUTTON_WAKEUP, GPIO.IN)
 
 # Cấu hình Generative AI
-genai.configure(api_key="**********")
+genai.configure(api_key=gemini_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 interrupted = False
