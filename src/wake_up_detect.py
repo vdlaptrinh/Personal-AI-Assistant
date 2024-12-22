@@ -40,7 +40,7 @@ interrupted = False
 files = ['object.json']
 data = {}
 for file in files:
-    with open('/home/pi/AI-Assistant/object.json') as json_file:
+    with open('/home/pi/Personal-AI-Assistant/object.json') as json_file:
         data[file] = json.load(json_file)
 obj_data = data.get('object.json', {})
 
@@ -102,9 +102,9 @@ def wakeup_callback(channel):
 # Cấu hình ngắt ngoài
 #GPIO.add_event_detect(BUTTON_INCREASE, GPIO.RISING, callback=increase_volume_callback, bouncetime=300)
 #GPIO.add_event_detect(BUTTON_DECREASE, GPIO.RISING, callback=decrease_volume_callback, bouncetime=300)
-if not GPIO.event_detected(BUTTON_WAKEUP):
-    GPIO.remove_event_detect(BUTTON_WAKEUP)
-    #GPIO.add_event_detect(BUTTON_WAKEUP, GPIO.RISING, callback=wakeup_callback, bouncetime=300)
+#if not GPIO.event_detected(BUTTON_WAKEUP):
+#    GPIO.remove_event_detect(BUTTON_WAKEUP)
+GPIO.add_event_detect(BUTTON_WAKEUP, GPIO.RISING, callback=wakeup_callback, bouncetime=300)
 
 
 def interrupt_callback():
@@ -113,7 +113,7 @@ def interrupt_callback():
 
 def tts_process_stt():
     #Pixels().wakeup()
-    os.system(f"aplay /home/pi/AI-Assistant/wake_up_sound.wav")
+    os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
     print("Hey Siri detected! Recognizing speech...")
     query = recognize_speech()
 
@@ -144,7 +144,7 @@ def tts_process_stt():
 async def wake_up_detect():
     #signal.signal(signal.SIGINT, signal_handler)
 
-    keyword_path = "/home/pi/AI-Assistant/models/hey_siri_raspberry-pi.ppn"
+    keyword_path = "/home/pi/Personal-AI-Assistant/models/hey_siri_raspberry-pi.ppn"
 
     porcupine = None
     audio_stream = None

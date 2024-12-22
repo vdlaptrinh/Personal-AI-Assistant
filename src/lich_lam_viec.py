@@ -16,7 +16,7 @@ url = "https://dttt.caothang.edu.vn/lich-cong-tac-tuan.html"
 files = ['object.json']
 data = {}
 for file in files:
-    with open('/home/pi/AI-Assistant/object.json', encoding='utf-8') as json_file:
+    with open('/home/pi/Personal-AI-Assistant/object.json', encoding='utf-8') as json_file:
         data[file] = json.load(json_file)
 obj_data = data.get('object.json', {})
 obj_monday = [p['value'] for p in obj_data['monday']] #Khai báo keyword dạng Object, đã định nghĩa trong object.json ở đây

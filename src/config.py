@@ -4,4 +4,4 @@
 """
 
 porcupine_access_key = "YOUR_KEY"
-gemini_key =  = "YOUR_KEY"
+gemini_key = "YOUR_KEY"
