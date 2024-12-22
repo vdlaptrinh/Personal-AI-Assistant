@@ -1,0 +1,29 @@
+sudo nano /etc/systemd/system/ai_assistant.service
+
+
+[Unit]
+Description=Chạy file Python tự động
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/Personal-AI-Assistant/main.py
+WorkingDirectory=/home/pi
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl daemon-reload
+sudo systemctl enable ai_assistant.service
+sudo systemctl start ai_assistant.service
+
+sudo systemctl stop ai_assistant.service
+
+sudo systemctl status ai_assistant.service
+
+journalctl -u ai_assistant.service
+

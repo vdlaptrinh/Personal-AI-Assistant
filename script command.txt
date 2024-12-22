@@ -1,0 +1,93 @@
+https://github.com/nickbild/voice_chatgpt/blob/main/voice_chat.py
+sudo apt-get update
+sudo apt-get upgrade
+
+sudo apt install python3
+python3 --version
+
+sudo apt install python3-pip
+pip3 --version
+
+sudo apt install git
+git --version
+
+sudo apt install ffmpeg
+
+sudo apt-get install python3-pyaudio
+
+
+https://github.com/waveshareteam/WM8960-Audio-HAT
+
+Clone driver:
+
+git clone https://github.com/waveshare/WM8960-Audio-HAT
+
+Install WM8960 driver:
+
+cd WM8960-Audio-HAT
+sudo ./install.sh 
+sudo reboot
+
+sudo dkms status
+
+wm8960-soundcard, 1.0, 4.19.58-v7l+, armv7l: installed
+
+sudo apt install libportaudio2 libportaudiocpp0 portaudio19-dev flac
+
+pip3 install --user --force-reinstall --no-deps numpy==1.19.5
+pip3 install --user --force-reinstall --no-deps numpy==1.26.5
+
+
+sudo apt-get install pulseaudio
+
+
+$ lsusb
+$ arecord -l
+$ cat /proc/asound/cards
+$ cat /proc/asound/modules
+
+$ sudo nano /usr/share/alsa/alsa.conf
+sudo nano /etc/asound.conf
+
+aplay -l
+
+
+
+
+defaults.ctl.card 0
+defaults.pcm.card 0
+
+$ sudo reboot
+
+$ arecord -d 5 -r 44100 test.wav
+arecord -d 5 -r 16000 test.wav
+$ aplay test.wav
+
+sudo raspi-config
+alsamixer
+
+
+cd /usr/lib/python3.11
+sudo rm EXTERNALLY-MANAGED
+
+
+python3 -m pip install -r requirements.txt
+
+python3 -m pip install google-generativeai
+python3 -m pip install SpeechRecognition
+#fastlangid
+python3 -m pip install pyaudio
+#openai
+python3 -m pip install pvporcupine
+#googletrans==4.0.0-rc1
+#gtts
+python3 -m pip install edge-tts
+python3 -m pip install pydub
+python3 -m pip install yt_dlp
+python3 -m pip install beautifulsoup4
+python3 -m pip install requests
+
+
+#protobuf<3.21.0
+#EdgeGPT
+#spacy
