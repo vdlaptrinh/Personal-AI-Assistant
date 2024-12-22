@@ -75,35 +75,15 @@ python main.py
 
 3. The assistant will process your query using Gemini and provide an appropriate response.
 
-## Auto Run
-```bash
-sudo nano /etc/systemd/system/ai_assistant.service
-```
-[Unit]
-Description=Chạy file Python tự động
-After=network.target
+4. Mở bài hát + tên bài hát
 
-[Service]
-ExecStart=/usr/bin/python3 /home/pi/AI-Assistant/main.py
-WorkingDirectory=/home/pi
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-User=pi
+5. Lịch làm việc + [thứ x]: x là thứ trong tuần
 
-[Install]
-WantedBy=multi-user.target
+## Auto Run: https://github.com/vdlaptrinh/Personal-AI-Assistant/blob/main/autorun_ai_assistant.txt
 
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable ai_assistant.service
-sudo systemctl start ai_assistant.service
-sudo systemctl stop ai_assistant.service
-sudo systemctl status ai_assistant.service
-journalctl -u ai_assistant.service
-```
+
 ## Sample Output
 https://www.youtube.com/shorts/zOJwcwMTKwQ
 ....
 
-This project uses code from https://github.com/ivan00105/Voice-Based-AI-Assistant-with-ChatGPT-on-Raspberry-Pi
+Tham khảo: https://github.com/ivan00105/Voice-Based-AI-Assistant-with-ChatGPT-on-Raspberry-Pi
