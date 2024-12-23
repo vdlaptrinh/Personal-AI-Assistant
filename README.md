@@ -8,7 +8,23 @@ This project is an implementation of a voice-based AI assistant using Google Gem
 - Text-to-Speech using edge_tts
 - Open music
 ...
+## Hardware
+Create a voice AI assistant using a Raspberry Pi 4, a ReSpeaker 2Mic HAT and Speaker.
+This tutorial should work for almost any Raspberry Pi and USB microphone. Audio enhancements and local wake word detection may require a 64-bit operating system, however.
 
+Project này cũng có thể dùng Raspberry Pi zero 2W, mạch AIO (2 mic, 4 button, 12 led) và cụm loa xiaodu https://www.youtube.com/shorts/2xxbX977_Ls
+
+## Install OS
+Follow instructions to install Raspberry Pi OS. Under "Choose OS", pick "Raspberry Pi OS (other)" and "Raspberry Pi OS (64-bit) Lite".
+
+When asking if you'd like to apply customization settings, choose "Edit Settings" and:
+
+Set a username/password
+Configure the wireless LAN
+Under the Services tab, enable SSH and use password authentication
+
+## Install Software
+After flashing and booting the OS, connect to it over SSH using the username/password you configured during flashing.
 
 ## WM8960 Audio HAT
 BUTTON	P17	Custom buttons
