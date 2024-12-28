@@ -3,5 +3,5 @@
     Create config.py yourself with the configuration below with your own API keys
 """
 
-porcupine_access_key = "YOUR_KEY"
-gemini_key = "YOUR_KEY"
+porcupine_access_key = "YOUR API KEY"
+gemini_key = "YOUR API KEY"

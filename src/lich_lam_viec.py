@@ -146,9 +146,9 @@ def lich_lam_viec(text):
         answer_text = 'Lỗi xử lý thông tin'
     #print(answer_text)
     if answer_text:
-        text_to_speech(answer_text, "vi", "output_file")
+        text_to_speech(answer_text, "vi")
     else:
-        text_to_speech("Không tìm thấy thông tin", "vi", "output_file")
+        text_to_speech("Không tìm thấy thông tin", "vi")
 #player2.play_and_wait(tts_process(answer_text,False)) #False - Phát câu trả lời TTS ko cache lại nội dung, True - Có cache lại để cho lần sau
 
 if __name__ == '__main__':

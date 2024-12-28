@@ -939,7 +939,7 @@
         "value": "chú ý"
     }
     ],
-    "grimm_story": [{
+    "truyen_vui": [{
         "value": "truyện cổ"
     },
     {
@@ -954,5 +954,95 @@
     {
         "value": "chuyện ý nghĩa"
     }
-    ]
+    ],
+	"chuc_tet": [{
+        "value": "chúc tết"
+    },
+    {
+        "value": "lời chúc"
+    },    
+	{
+        "value": "chúc Tết"
+    },
+    {
+        "value": "Tết"
+    },
+	{
+        "value": "chúc mừng"
+    },
+    {
+        "value": "chúc xuân"
+    }
+    ],
+	"ong_ba": [{
+        "value": "ông"
+    },
+	{
+        "value": "Bà"
+    },
+	{
+        "value": "bà"
+    },
+	{
+        "value": "Ông"
+    }
+	],
+	"bo_me": [{
+        "value": "bố"
+    },
+	{
+        "value": "mẹ"
+    }
+	],
+	"gia_dinh": [{
+        "value": "gia đình"
+    },
+	{
+        "value": "anh chị em"
+    }
+	],
+	"vo_chong": [{
+        "value": "vợ"
+    },
+	{
+        "value": "chồng"
+    }
+	],
+	
+	"ban_than": [{
+        "value": "bạn thân"
+    },
+	{
+        "value": "bạn bè"
+    }
+	],
+	"nguoi_yeu": [{
+        "value": "người yêu"
+    },
+	{
+        "value": "em yêu"
+    }
+	],
+	"sep": [{
+        "value": "sếp"
+    },
+	{
+        "value": "thủ trưởng"
+    }
+	],
+	"dong_nghiep": [{
+        "value": "đồng nghiệp"
+    },
+	{
+        "value": "cùng làm"
+    }
+	],
+	"thay_co": [{
+        "value": "thầy"
+    },
+	{
+        "value": "cô"
+    }
+	]
+	
 } 

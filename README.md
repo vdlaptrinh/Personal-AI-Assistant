@@ -11,7 +11,10 @@ This project is an implementation of a voice-based AI assistant using Google Gem
 ## Hardware
 Create a voice AI assistant using a Raspberry Pi 4, a ReSpeaker 2Mic HAT and Speaker.
 This tutorial should work for almost any Raspberry Pi and USB microphone. Audio enhancements and local wake word detection may require a 64-bit operating system, however.
+https://wiki.keyestudio.com/Ks0314_keyestudio_ReSpeaker_2-Mic_Pi_HAT_V1.0
 
+https://www.raspberrypi.com/products/raspberry-pi-4-model-b/
+https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/
 Project này cũng có thể dùng Raspberry Pi zero 2W, mạch AIO (2 mic, 4 button, 12 led) và cụm loa xiaodu https://www.youtube.com/shorts/2xxbX977_Ls
 
 ## Install OS

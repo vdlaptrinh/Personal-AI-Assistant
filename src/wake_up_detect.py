@@ -14,9 +14,11 @@ from src.speech_to_text import recognize_speech
 from src.text_to_speech import text_to_speech
 from src.config import porcupine_access_key
 from src.config import gemini_key
-from src.test_yt_m3u8 import download_and_play_m3u8
+from src.yt_dlp_play_m3u8 import play_m3u8
 #from src.pixels import Pixels
 from src.lich_lam_viec import lich_lam_viec
+from src.doc_truyen import doc_truyen
+from src.loi_chuc_tet import chuc_tet
 import google.generativeai as genai
 
 # Cấu hình GPIO cho nút nhấn
@@ -46,6 +48,8 @@ obj_data = data.get('object.json', {})
 
 obj_music = [p['value'] for p in obj_data['music']]
 obj_work_calendar = [p['value'] for p in obj_data['work_calendar']]
+obj_truyen_vui = [p['value'] for p in obj_data['truyen_vui']]
+obj_chuc_tet = [p['value'] for p in obj_data['chuc_tet']]
 
 
 # Hàm xử lý tín hiệu ngắt
@@ -93,7 +97,7 @@ def extract_song_name(text):
 
 # Hàm xử lý khi nút nhấn WAKEUP
 def wakeup_callback(channel):
-    print("Nút Wakeup được nhấn!")
+    #print("Nút Wakeup được nhấn!")
     #GPIO.cleanup()
     #change_volume("decrease")
     #asyncio.run(wake_up_detect())
@@ -114,7 +118,7 @@ def interrupt_callback():
 def tts_process_stt():
     #Pixels().wakeup()
     os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
-    print("Hey Siri detected! Recognizing speech...")
+    #print("Hey Siri detected! Recognizing speech...")
     query = recognize_speech()
 
     data = split_into_chunks(query)
@@ -123,21 +127,27 @@ def tts_process_stt():
     try:
         if any(item in data for item in obj_music):
             song_name = extract_song_name(query)
-            download_and_play_m3u8(song_name)
+            play_m3u8(song_name)
 
         elif any(item in data for item in obj_work_calendar):
             #print("calendar")
             lich_lam_viec(query)
+            
+        elif any(item in data for item in obj_truyen_vui):
+            doc_truyen()
+            
+        elif any(item in data for item in obj_chuc_tet):
+            chuc_tet(query)
 
         else:
             gemini_result = generate_ai_response(query)
             print("GPT:", gemini_result)
-            text_to_speech(gemini_result, "vi", "output_file")
+            text_to_speech(gemini_result, "vi")
 
     except Exception as e:
         print(f"Lỗi xử lý: {e}")
         answer_text = 'Không nhận dạng được câu lệnh'
-        text_to_speech(answer_text, "vi", "output_file")
+        text_to_speech(answer_text, "vi")
     #Pixels().off()
 
 # Chương trình chính
@@ -154,17 +164,27 @@ async def wake_up_detect():
         porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=[keyword_path])
         
         pa = pyaudio.PyAudio()
+        
+
+        print("Danh sách các thiết bị âm thanh khả dụng:\n")
+        for i in range(pa.get_device_count()):
+            device_info = pa.get_device_info_by_index(i)
+            print(f"ID: {i}, Tên: {device_info['name']}, Loại: {device_info['maxInputChannels']} kênh đầu vào")
+            
+        
         audio_stream = pa.open(
             rate=porcupine.sample_rate,
             channels=1,
             format=pyaudio.paInt16,
             input=True,
-            frames_per_buffer=porcupine.frame_length
+            #output_device_index=None,
+            #input_device_index=0
+            frames_per_buffer=512
         )
 
         print("Listening for 'Hey Siri'...")
-        text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi", "output_file")
-
+        #text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi", "output_file.mp3")
+        text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi")
         # Chạy vòng lặp phát hiện từ khóa và kiểm tra nút nhấn song song
         await asyncio.gather(
             #check_buttons(),
@@ -184,8 +204,8 @@ async def wake_up_detect():
 # Phát hiện từ khóa "Hey Siri"
 async def detect_keywords(porcupine, audio_stream):
     while not interrupt_callback():
-        pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
-        pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
+        pcm = audio_stream.read(512, exception_on_overflow=False)
+        pcm = struct.unpack_from("h" * 512, pcm)
         keyword_index = porcupine.process(pcm)
 
         if keyword_index >= 0:
