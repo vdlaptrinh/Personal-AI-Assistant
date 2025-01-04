@@ -1043,6 +1043,33 @@
 	{
         "value": "cô"
     }
+	],
+	"hass": [{
+        "value": "tắt"
+    },
+	{
+        "value": "Tắt"
+    },
+	{
+        "value": "mở"
+    },
+	{
+        "value": "thực thi"
+    },
+	{
+        "value": "tắt đèn"
+    },
+	{
+        "value": "thực hiện"
+    },
+	{
+        "value": "bật đèn"
+    },
+	{
+        "value": "bật quạt"
+    },
+	{
+        "value": "tắt quạt"
+    }	
 	]
-	
 } 

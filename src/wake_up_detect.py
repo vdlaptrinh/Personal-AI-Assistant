@@ -19,6 +19,7 @@ from src.yt_dlp_play_m3u8 import play_m3u8
 from src.lich_lam_viec import lich_lam_viec
 from src.doc_truyen import doc_truyen
 from src.loi_chuc_tet import chuc_tet
+from src.hass_process import hass_process
 import google.generativeai as genai
 
 # Cấu hình GPIO cho nút nhấn
@@ -50,7 +51,7 @@ obj_music = [p['value'] for p in obj_data['music']]
 obj_work_calendar = [p['value'] for p in obj_data['work_calendar']]
 obj_truyen_vui = [p['value'] for p in obj_data['truyen_vui']]
 obj_chuc_tet = [p['value'] for p in obj_data['chuc_tet']]
-
+obj_hass = [p['value'] for p in obj_data['hass']]
 
 # Hàm xử lý tín hiệu ngắt
 def signal_handler(signal, frame):
@@ -130,7 +131,6 @@ def tts_process_stt():
             play_m3u8(song_name)
 
         elif any(item in data for item in obj_work_calendar):
-            #print("calendar")
             lich_lam_viec(query)
             
         elif any(item in data for item in obj_truyen_vui):
@@ -138,7 +138,11 @@ def tts_process_stt():
             
         elif any(item in data for item in obj_chuc_tet):
             chuc_tet(query)
-
+            
+        elif any(item in query for item in obj_hass):
+            #print("hass_process")
+            hass_process(query)
+            
         else:
             gemini_result = generate_ai_response(query)
             print("GPT:", gemini_result)
