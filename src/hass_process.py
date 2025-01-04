@@ -72,7 +72,7 @@ def hass_process_device(ten_thiet_bi, action="toggle"):
     entity_id = get_entity_id(ten_thiet_bi)
     if not entity_id:
         print(f"Không tìm thấy thiết bị có tên: {ten_thiet_bi}")
-        answer_text = "Không tìm thấy thiết bị có tên: {ten_thiet_bi}"
+        answer_text = f"Không tìm thấy thiết bị có tên: {ten_thiet_bi}"
         return answer_text
 
     # Định nghĩa URL và payload
@@ -86,7 +86,7 @@ def hass_process_device(ten_thiet_bi, action="toggle"):
     # Gửi yêu cầu bật/tắt
     response = requests.post(url, headers=headers, json=payload)
     if response.status_code in (200, 202):
-        print(f"đã '{action}' {ten_thiet_bi}")
+        #print(f"đã '{action}' {ten_thiet_bi}")
         # Tạo answer_text dựa trên hành động
         if action == "turn_on":
             answer_text = f"Đã bật {ten_thiet_bi}"
@@ -138,7 +138,7 @@ def active(scene_name):
             # Gửi yêu cầu kích hoạt
             response = requests.post(url, headers=headers, json=payload)
             if response.status_code in (200, 202):
-                print(f"đã kích hoạt thành công kịch bản: {scene_name}")
+                #print(f"đã kích hoạt thành công kịch bản: {scene_name}")
                 answer_text = f"đã kích hoạt thành công kịch bản: {scene_name}"
                 return answer_text
             else:
@@ -146,7 +146,7 @@ def active(scene_name):
                 answer_text = f"Lỗi khi kích hoạt kịch bản: {response.status_code}, {response.text}"
                 return answer_text
     print(f"Không tìm thấy kịch bản nào có tên: {scene_name}")
-    answer_text = "Không tìm thấy kịch bản nào có tên: {scene_name}"
+    answer_text = f"Không tìm thấy kịch bản nào có tên: {scene_name}"
 if __name__ == "__main__":
     while True:
         data = input("Nhập lệnh (bật/tắt hoặc thực thi/thực hiện): ")

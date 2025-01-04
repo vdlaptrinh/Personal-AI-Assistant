@@ -102,13 +102,11 @@ def wakeup_callback(channel):
     #GPIO.cleanup()
     #change_volume("decrease")
     #asyncio.run(wake_up_detect())
-    tts_process_stt()
+     asyncio.run(tts_process_stt())
 
 # Cấu hình ngắt ngoài
 #GPIO.add_event_detect(BUTTON_INCREASE, GPIO.RISING, callback=increase_volume_callback, bouncetime=300)
 #GPIO.add_event_detect(BUTTON_DECREASE, GPIO.RISING, callback=decrease_volume_callback, bouncetime=300)
-#if not GPIO.event_detected(BUTTON_WAKEUP):
-#    GPIO.remove_event_detect(BUTTON_WAKEUP)
 GPIO.add_event_detect(BUTTON_WAKEUP, GPIO.RISING, callback=wakeup_callback, bouncetime=300)
 
 
@@ -116,12 +114,12 @@ def interrupt_callback():
     global interrupted
     return interrupted
 
-def tts_process_stt():
+async def tts_process_stt():
     #Pixels().wakeup()
-    os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
+    #os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
+    subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/ding.mp3"])
     #print("Hey Siri detected! Recognizing speech...")
     query = recognize_speech()
-
     data = split_into_chunks(query)
     answer_text = 'Không có câu trả lời cho tình huống này'
 
@@ -140,7 +138,6 @@ def tts_process_stt():
             chuc_tet(query)
             
         elif any(item in query for item in obj_hass):
-            #print("hass_process")
             hass_process(query)
             
         else:
@@ -190,10 +187,13 @@ async def wake_up_detect():
         #text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi", "output_file.mp3")
         text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi")
         # Chạy vòng lặp phát hiện từ khóa và kiểm tra nút nhấn song song
-        await asyncio.gather(
+        await detect_keywords(porcupine, audio_stream)
+        #await asyncio.gather(
             #check_buttons(),
-            detect_keywords(porcupine, audio_stream)
-        )
+        #    detect_keywords(porcupine, audio_stream)
+        #)
+    except Exception as e:
+        print(f"Lỗi: {e}")
 
     finally:
         if porcupine is not None:
@@ -207,14 +207,17 @@ async def wake_up_detect():
 
 # Phát hiện từ khóa "Hey Siri"
 async def detect_keywords(porcupine, audio_stream):
-    while not interrupt_callback():
-        pcm = audio_stream.read(512, exception_on_overflow=False)
-        pcm = struct.unpack_from("h" * 512, pcm)
-        keyword_index = porcupine.process(pcm)
+    try:
+        while not interrupt_callback():
+            pcm = audio_stream.read(512, exception_on_overflow=False)
+            pcm = struct.unpack_from("h" * 512, pcm)
+            keyword_index = porcupine.process(pcm)
 
-        if keyword_index >= 0:
-            tts_process_stt()
-
+            if keyword_index >= 0:
+                await tts_process_stt()
+            await asyncio.sleep(0.01)  # Giảm tải CPU
+    except Exception as e:
+        print(f"Lỗi trong phát hiện từ khóa: {e}")
 
 # Khởi động chương trình
 if __name__ == "__main__":
