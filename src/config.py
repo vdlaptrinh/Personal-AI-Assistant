@@ -5,3 +5,5 @@
 
 porcupine_access_key = "YOUR API KEY"
 gemini_key = "YOUR API KEY"
+HASS_IP = "http://192.168.10.25:8123"
+LONG_TOKEN = "YOUR API KEY"
