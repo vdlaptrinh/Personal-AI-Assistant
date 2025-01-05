@@ -1071,5 +1071,18 @@
 	{
         "value": "tắt quạt"
     }	
-	]
+	],
+	"xin_chao": [{
+        "value": "Xin chào"
+    },
+	{
+        "value": "Chào bạn"
+    },
+	{
+        "value": "Bạn tên gì"
+    },
+	{
+        "value": "biết làm gì"
+    }
+	]	
 } 
