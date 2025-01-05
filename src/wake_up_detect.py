@@ -153,6 +153,7 @@ async def tts_process_stt():
         print(f"Lỗi xử lý: {e}")
         answer_text = 'Không nhận dạng được câu lệnh'
         text_to_speech(answer_text, "vi")
+    subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/dong.mp3"])
     #Pixels().off()
 
 # Chương trình chính
