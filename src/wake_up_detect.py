@@ -52,7 +52,7 @@ obj_work_calendar = [p['value'] for p in obj_data['work_calendar']]
 obj_truyen_vui = [p['value'] for p in obj_data['truyen_vui']]
 obj_chuc_tet = [p['value'] for p in obj_data['chuc_tet']]
 obj_hass = [p['value'] for p in obj_data['hass']]
-
+obj_xin_chao = [p['value'] for p in obj_data['xin_chao']]
 # Hàm xử lý tín hiệu ngắt
 def signal_handler(signal, frame):
     global interrupted
@@ -74,8 +74,8 @@ def change_volume(action):
 
 
 # Hàm sinh phản hồi từ Generative AI
-def generate_ai_response(query):
-    response = model.generate_content(query)
+def generate_ai_response(data):
+    response = model.generate_content(data)
     return response.text
 
 
@@ -93,7 +93,7 @@ def extract_song_name(text):
     match = re.search(r"(mở nhạc|mở bài hát)\s+(.*)", text, re.IGNORECASE)
     if match:
         return match.group(2).strip()
-    return None
+    return 'Mộng hoa sim'
     
 
 # Hàm xử lý khi nút nhấn WAKEUP
@@ -124,7 +124,11 @@ async def tts_process_stt():
     answer_text = 'Không có câu trả lời cho tình huống này'
 
     try:
-        if any(item in data for item in obj_music):
+        if any(item in query for item in obj_xin_chao):
+            answer_text = "Tôi là 1 mô hình ngôn ngữ lớn được đào tạo bởi google. Tôi được thực hiện tại bộ môn điện tử viễn thông, trường cao đẳng kỹ thuật cao thắng. Bạn có thể hỏi tôi lịch công tác tuần, mở nhạc, điều khiển thiết bị, đọc 1 truyện hay hoặc có thể yêu cầu tôi gửi lời chúc tết đến ông bà, bố mẹ, gia đình, sếp, đồng nghiệp, vợ chồng, người yêu hay thầy cô."
+            text_to_speech(answer_text, "vi")
+            
+        elif any(item in data for item in obj_music):
             song_name = extract_song_name(query)
             play_m3u8(song_name)
 
@@ -215,7 +219,7 @@ async def detect_keywords(porcupine, audio_stream):
 
             if keyword_index >= 0:
                 await tts_process_stt()
-            await asyncio.sleep(0.01)  # Giảm tải CPU
+            #await asyncio.sleep(0.01)  # Giảm tải CPU
     except Exception as e:
         print(f"Lỗi trong phát hiện từ khóa: {e}")
 
