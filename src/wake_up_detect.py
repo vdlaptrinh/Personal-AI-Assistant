@@ -9,13 +9,14 @@ import re
 import json
 import subprocess
 import time
+import threading
 import RPi.GPIO as GPIO
 from src.speech_to_text import recognize_speech
 from src.text_to_speech import text_to_speech
 from src.config import porcupine_access_key
 from src.config import gemini_key
 from src.yt_dlp_play_m3u8 import play_m3u8
-#from src.pixels import Pixels
+from src.pixels import Pixels
 from src.lich_lam_viec import lich_lam_viec
 from src.doc_truyen import doc_truyen
 from src.loi_chuc_tet import chuc_tet
@@ -38,6 +39,7 @@ genai.configure(api_key=gemini_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 interrupted = False
+pixels = Pixels()
 
 # Đọc tệp JSON chứa từ khóa
 files = ['object.json']
@@ -95,6 +97,22 @@ def extract_song_name(text):
         return match.group(2).strip()
     return 'Mộng hoa sim'
     
+def handle_music_and_lights(song_name, pixels):
+    """
+    Chạy đồng thời phát nhạc và hiệu ứng đèn.
+    """
+    # Tạo thread cho phát nhạc
+    music_thread = threading.Thread(target=play_m3u8, args=(song_name,))
+    # Tạo thread cho hiệu ứng đèn
+    lights_thread = threading.Thread(target=pixels.speak)
+
+    # Bắt đầu cả hai thread
+    music_thread.start()
+    lights_thread.start()
+
+    # Chờ cả hai hoàn thành (nếu cần)
+    music_thread.join()
+    lights_thread.join()
 
 # Hàm xử lý khi nút nhấn WAKEUP
 def wakeup_callback(channel):
@@ -115,11 +133,12 @@ def interrupt_callback():
     return interrupted
 
 async def tts_process_stt():
-    #Pixels().wakeup()
+    pixels.wakeup()
     #os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
     subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/ding.mp3"])
     #print("Hey Siri detected! Recognizing speech...")
     query = recognize_speech()
+    pixels.think()
     data = split_into_chunks(query)
     answer_text = 'Không có câu trả lời cho tình huống này'
 
@@ -130,7 +149,8 @@ async def tts_process_stt():
             
         elif any(item in data for item in obj_music):
             song_name = extract_song_name(query)
-            play_m3u8(song_name)
+            #play_m3u8(song_name)
+            handle_music_and_lights(song_name, pixels)
 
         elif any(item in data for item in obj_work_calendar):
             lich_lam_viec(query)
@@ -154,7 +174,7 @@ async def tts_process_stt():
         answer_text = 'Không nhận dạng được câu lệnh'
         text_to_speech(answer_text, "vi")
     subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/dong.mp3"])
-    #Pixels().off()
+    pixels.off()
 
 # Chương trình chính
 async def wake_up_detect():
@@ -165,6 +185,7 @@ async def wake_up_detect():
     porcupine = None
     audio_stream = None
     pa = None
+    #pixels = Pixels()
 
     try:
         porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=[keyword_path])
