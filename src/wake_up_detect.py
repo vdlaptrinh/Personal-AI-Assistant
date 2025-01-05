@@ -32,7 +32,6 @@ GPIO.setmode(GPIO.BCM)
 #GPIO.setup(BUTTON_INCREASE, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 #GPIO.setup(BUTTON_DECREASE, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(BUTTON_WAKEUP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-#GPIO.setup(BUTTON_WAKEUP, GPIO.IN)
 
 # Cấu hình Generative AI
 genai.configure(api_key=gemini_key)
@@ -185,7 +184,6 @@ async def wake_up_detect():
     porcupine = None
     audio_stream = None
     pa = None
-    #pixels = Pixels()
 
     try:
         porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=[keyword_path])

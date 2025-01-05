@@ -126,7 +126,7 @@ class Pixels:
         self.dev.show()
 
 
-pixels = Pixels()
+#pixels = Pixels()
 
 
 if __name__ == '__main__':
