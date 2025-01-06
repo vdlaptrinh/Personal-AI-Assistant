@@ -1045,12 +1045,6 @@
     }
 	],
 	"hass": [{
-        "value": "tắt"
-    },
-	{
-        "value": "Tắt"
-    },
-	{
         "value": "kích hoạt"
     },
 	{
@@ -1058,6 +1052,9 @@
     },
 	{
         "value": "tắt đèn"
+    },
+	{
+        "value": "Tắt đèn"
     },
 	{
         "value": "thực hiện"
@@ -1070,6 +1067,9 @@
     },
 	{
         "value": "tắt quạt"
+    },
+	{
+        "value": "Tắt quạt"
     }	
 	],
 	"xin_chao": [{

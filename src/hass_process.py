@@ -40,10 +40,10 @@ def get_entity_id(ten_thiet_bi):
 
 def hass_process(data):
     answer_text = "Lỗi HASS"
-    if "thực thi" in data or "thực hiện" in data:
+    if "thực thi" in data or "thực hiện" in data or "kích hoạt" in data:
         # Tách tên kịch bản
-        words = data.split()
-        scene_name = " ".join(word for word in words if word not in ["thực thi", "thực hiện", "kịch bản"])
+        #words = data.split()
+        #scene_name = " ".join(word for word in words if word not in ["thực thi", "thực hiện", "kịch bản"])
         scene_name = data.replace("thực thi", "").replace("thực hiện", "").replace("kịch bản", "").replace("kích hoạt", "").strip()
         if scene_name:
             #print(f"đã kích hoạt kịch bản: {scene_name}")
