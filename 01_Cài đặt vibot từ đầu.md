@@ -133,6 +133,8 @@ sudo systemctl disable ai_assistant.service
 ```sh
 sudo nano /etc/systemd/system/ai_assistant.service
 ```
+Nội dung ai_assistant.service
+```sh
 [Unit]
 Description=VIBOT
 After=network.target
@@ -147,3 +149,4 @@ User=pi
 
 [Install]
 WantedBy=multi-user.target
+```
