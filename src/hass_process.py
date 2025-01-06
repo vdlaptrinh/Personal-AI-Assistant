@@ -32,7 +32,10 @@ def get_entity_id(ten_thiet_bi):
 
     if response.status_code == 200:
         for entity in response.json():
-            if ten_thiet_bi.lower() in entity["attributes"].get("friendly_name", "").lower():
+            #if ten_thiet_bi.lower() in entity["attributes"].get("friendly_name", "").lower():
+            #   return entity["entity_id"]
+            if (entity["entity_id"].startswith("switch.") or entity["entity_id"].startswith("light.")) and \
+                ten_thiet_bi.lower() in entity["attributes"].get("friendly_name", "").lower():
                 return entity["entity_id"]
     else:
         print(f"Lỗi khi lấy danh sách thiết bị: {response.status_code}")
