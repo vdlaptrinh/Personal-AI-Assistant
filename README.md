@@ -38,34 +38,49 @@ https://github.com/vdlaptrinh/Personal-AI-Assistant/blob/main/01_C%C3%A0i%20%C4%
 2. The assistant will process your query using Gemini and provide an appropriate response.
 
 3. xin chào
+
 Chào bạn, Xin chào, Bạn tên gì, biết làm gì
 
 4. HASS
+
 thực hiện/thực thi/ kích hoạt  + tên kịch bản
+
 ví dụ kích hoạt kịch bản đi ngủ
 
 bật/tắt đèn/quạt + tên thiết bị (friendly name)
+
 ví dụ bật đèn bàn học
+
 ví dụ tắt quạt phòng khách
 
 5. Chúc tết
+
 chúc tết + ông bà/ bố mẹ/ sếp/ đồng nghiệp/ gia đình/ thầy cô/ người yêu/ vợ chồng
+
 ví dụ chúc tết ông bà giúp anh
 
 6. mở nhạc, phát nhạc
+
 mở nhạc/ mở bài hát + tên bài hát (tiêu đề youtube)
+
 ví dụ: mở bài hát đông lạnh mới nhớ tới xuân oanh tạ
 
 7. truyện hay
+
 đọc 1 truyện hay/ truyện ý nghĩa
-kể 1 truyện hay đi em
+
+ví dụ: kể 1 truyện hay đi em
 
 8. lịch làm việc
+
 lịch làm việc/ lịch công tác tuần + [thứ 3]
+
 ví dụ: lịch làm việc => hôm  nay
+
 ví dụ: lịch công tác tuần thứ 4
 
 9. other
+
 data khác các từ khoá trên => gemini
 
 
