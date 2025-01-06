@@ -29,76 +29,44 @@ Under the Services tab, enable SSH and use password authentication
 ## Install Software
 After flashing and booting the OS, connect to it over SSH using the username/password you configured during flashing.
 
-## WM8960 Audio HAT
-BUTTON	P17	Custom buttons
-Install Driver
-Update system:
-```bash
-sudo apt-get update
-sudo apt-get upgrade
-```
-Clone driver:
-```bash
-git clone https://github.com/waveshare/WM8960-Audio-HAT
-```
-Install WM8960 driver:
-```bash
-cd WM8960-Audio-HAT
-sudo ./install.sh 
-sudo reboot
-```
-Check if the driver is installed.
-```bash
-sudo dkms status
-```
-pi@raspberrypi:~ $ sudo dkms status 
-wm8960-soundcard, 1.0, 4.19.58-v7l+, armv7l: installed
-
-
-## Installation
-1. Clone the repository
-```bash
-git clone https://github.com/vdlaptrinh/Personal-AI-Assistant.git
-cd Personal-AI-Assistant
-```
-2. Update and install your Raspberry Pi packages:
-```bash
-sudo apt-get update
-sudo apt-get upgrade
-...
-```
-3. Set up a virtual environment and activate it
-```bash
-...
-```
-4. Install the required packages
-```bash
-...
-```
-
-## Configuration
-Before running the project, you need to edit a `config.py` file in the `src` directory with your API keys. 
-### Google Gemini
-Refer to https://ai.google.dev/gemini-api/docs?hl=vi
-### PicoVoice Access Key
-Get your PicoVoice access key from the [PicoVoice Console](https://picovoice.ai/ "PicoVoice Console"). Add the access key to the `config.py` file.
-### Audio setup
-Refer to https://www.youtube.com/watch?v=vEMzN5RgXbw&ab_channel=AssemblyAI
+https://github.com/vdlaptrinh/Personal-AI-Assistant/blob/main/01_C%C3%A0i%20%C4%91%E1%BA%B7t%20vibot%20t%E1%BB%AB%20%C4%91%E1%BA%A7u.md
 
 ## Usage
-1. Run the main script:
-```bash
-python main.py
-```
-2. The assistant will listen for the wake word "Hey Siri". Once detected, it will prompt you to speak your query.
 
-3. The assistant will process your query using Gemini and provide an appropriate response.
+1. The assistant will listen for the wake word "Hey Siri". Once detected, it will prompt you to speak your query.
 
-4. Mở bài hát + tên bài hát
+2. The assistant will process your query using Gemini and provide an appropriate response.
 
-5. Lịch làm việc + [thứ x]: x là thứ trong tuần
+3. xin chào
+Chào bạn, Xin chào, Bạn tên gì, biết làm gì
 
-## Auto Run: https://github.com/vdlaptrinh/Personal-AI-Assistant/blob/main/autorun_ai_assistant.txt
+4. HASS
+thực hiện/thực thi/ kích hoạt  + tên kịch bản
+ví dụ kích hoạt kịch bản đi ngủ
+
+bật/tắt đèn/quạt + tên thiết bị (friendly name)
+ví dụ bật đèn bàn học
+ví dụ tắt quạt phòng khách
+
+5. Chúc tết
+chúc tết + ông bà/ bố mẹ/ sếp/ đồng nghiệp/ gia đình/ thầy cô/ người yêu/ vợ chồng
+ví dụ chúc tết ông bà giúp anh
+
+6. mở nhạc, phát nhạc
+mở nhạc/ mở bài hát + tên bài hát (tiêu đề youtube)
+ví dụ: mở bài hát đông lạnh mới nhớ tới xuân oanh tạ
+
+7. truyện hay
+đọc 1 truyện hay/ truyện ý nghĩa
+kể 1 truyện hay đi em
+
+8. lịch làm việc
+lịch làm việc/ lịch công tác tuần + [thứ 3]
+ví dụ: lịch làm việc => hôm  nay
+ví dụ: lịch công tác tuần thứ 4
+
+9. other
+data khác các từ khoá trên => gemini
 
 
 ## Sample Output
