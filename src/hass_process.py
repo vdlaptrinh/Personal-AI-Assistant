@@ -44,7 +44,7 @@ def hass_process(data):
         # Tách tên kịch bản
         words = data.split()
         scene_name = " ".join(word for word in words if word not in ["thực thi", "thực hiện", "kịch bản"])
-        scene_name = data.replace("thực thi", "").replace("thực hiện", "").replace("kịch bản", "").strip()
+        scene_name = data.replace("thực thi", "").replace("thực hiện", "").replace("kịch bản", "").replace("kích hoạt", "").strip()
         if scene_name:
             #print(f"đã kích hoạt kịch bản: {scene_name}")
             answer_text = active(scene_name)
