@@ -112,11 +112,14 @@ LONG_TOKEN = "YOUR API KEY"
 ```
 
 4.3. Chạy vibot
-Gõ các lệnh sau
+activate vibot_env nếu rồi bỏ qua 2 lệnh đầu
 ```sh
+cd /home/pi
+source vibot_env/bin/activate
 cd /home/pi/Personal-AI-Assistant/
 python3 main.py
 ```
+
 4.4. Các lệnh tạm dừng, vô hiệu, xem trạng thái...
 ```sh
 sudo systemctl daemon-reload
