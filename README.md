@@ -82,7 +82,11 @@ https://github.com/vdlaptrinh/Personal-AI-Assistant/blob/main/01_C%C3%A0i%20%C4%
 
 - ví dụ: lịch công tác tuần thứ 4
 
-9. other
+9. tăng âm lượng/ giảm âm lượng
+
+- mỗi lần sẽ tăng hoặc giảm 5%
+
+10. other
 
 - data khác các từ khoá trên => gemini
 
