@@ -145,6 +145,15 @@ async def tts_process_stt():
         if any(item in query for item in obj_xin_chao):
             answer_text = "Tôi là 1 mô hình ngôn ngữ lớn được đào tạo bởi google. Tôi được thực hiện tại bộ môn điện tử viễn thông, trường cao đẳng kỹ thuật cao thắng. Bạn có thể hỏi tôi lịch công tác tuần, mở nhạc, điều khiển thiết bị, đọc 1 truyện hay hoặc có thể yêu cầu tôi gửi lời chúc tết đến ông bà, bố mẹ, gia đình, sếp, đồng nghiệp, vợ chồng, người yêu hay thầy cô."
             text_to_speech(answer_text, "vi")
+        elif 'tăng âm lượng' in query:
+            subprocess.run(["amixer", "sset", "Playback", "5%+"])
+            answer_text = "đã tăng âm lượng thêm 5%"
+            text_to_speech(answer_text, "vi")
+            
+        elif 'giảm âm lượng' in query:
+            subprocess.run(["amixer", "sset", "Playback", "5%-"])
+            answer_text = "đã giảm âm lượng thêm 5%"
+            text_to_speech(answer_text, "vi") 
             
         elif any(item in data for item in obj_music):
             song_name = extract_song_name(query)
@@ -178,6 +187,7 @@ async def tts_process_stt():
 # Chương trình chính
 async def wake_up_detect():
     #signal.signal(signal.SIGINT, signal_handler)
+    #subprocess.run(["amixer", "sset", "Playback", "30%-"])
 
     keyword_path = "/home/pi/Personal-AI-Assistant/models/hey_siri_raspberry-pi.ppn"
 
@@ -203,13 +213,16 @@ async def wake_up_detect():
             format=pyaudio.paInt16,
             input=True,
             #output_device_index=None,
-            #input_device_index=0
+            #input_device_index=0,
             frames_per_buffer=512
         )
 
         print("Listening for 'Hey Siri'...")
+        #subprocess.run(["amixer", "sset", "Playback", "65%"])
         #text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi", "output_file.mp3")
+        pixels.speak()
         text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi")
+        pixels.off()
         # Chạy vòng lặp phát hiện từ khóa và kiểm tra nút nhấn song song
         await detect_keywords(porcupine, audio_stream)
         #await asyncio.gather(
