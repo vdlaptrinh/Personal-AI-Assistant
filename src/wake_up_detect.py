@@ -33,12 +33,19 @@ GPIO.setmode(GPIO.BCM)
 #GPIO.setup(BUTTON_DECREASE, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(BUTTON_WAKEUP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
+
+
 # Cấu hình Generative AI
 genai.configure(api_key=gemini_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+# Thêm biến toàn cục 
 interrupted = False
 pixels = Pixels()
+button_press_count = 0 
+last_button_press_time = 0 
+music_thread = None 
+playing_music = False
 
 # Đọc tệp JSON chứa từ khóa
 files = ['object.json']
@@ -54,6 +61,8 @@ obj_truyen_vui = [p['value'] for p in obj_data['truyen_vui']]
 obj_chuc_tet = [p['value'] for p in obj_data['chuc_tet']]
 obj_hass = [p['value'] for p in obj_data['hass']]
 obj_xin_chao = [p['value'] for p in obj_data['xin_chao']]
+
+
 # Hàm xử lý tín hiệu ngắt
 def signal_handler(signal, frame):
     global interrupted
@@ -97,6 +106,7 @@ def extract_song_name(text):
     return 'Mộng hoa sim'
     
 def handle_music_and_lights(song_name, pixels):
+    global music_thread, playing_music
     """
     Chạy đồng thời phát nhạc và hiệu ứng đèn.
     """
@@ -108,24 +118,39 @@ def handle_music_and_lights(song_name, pixels):
     # Bắt đầu cả hai thread
     music_thread.start()
     lights_thread.start()
+    playing_music = True
 
     # Chờ cả hai hoàn thành (nếu cần)
     music_thread.join()
     lights_thread.join()
+    playing_music = False
 
 # Hàm xử lý khi nút nhấn WAKEUP
-def wakeup_callback(channel):
-    #print("Nút Wakeup được nhấn!")
-    #GPIO.cleanup()
-    #change_volume("decrease")
-    #asyncio.run(wake_up_detect())
-     asyncio.run(tts_process_stt())
 
-# Cấu hình ngắt ngoài
+def wakeup_callback(channel):
+    global button_press_count, last_button_press_time, playing_music, music_thread
+
+    current_time = time.time()
+    if current_time - last_button_press_time < 0.5:  # Nếu nhấn lần thứ 2 trong vòng 0.5 giây
+        button_press_count += 1
+    else:
+        button_press_count = 1  # Reset đếm khi nhấn quá thời gian cho phép
+
+    last_button_press_time = current_time
+
+    if button_press_count == 2:  # Double nhấn
+        if playing_music and music_thread.is_alive():
+            subprocess.call(["pkill", "ffplay"])  # Dừng phát nhạc
+            playing_music = False
+            pixels.off()
+        else:
+            asyncio.run(tts_process_stt())
+        button_press_count = 0  # Reset đếm sau khi xử lý double nhấn
+        
+#Cấu hình ngắt ngoài
 #GPIO.add_event_detect(BUTTON_INCREASE, GPIO.RISING, callback=increase_volume_callback, bouncetime=300)
 #GPIO.add_event_detect(BUTTON_DECREASE, GPIO.RISING, callback=decrease_volume_callback, bouncetime=300)
-GPIO.add_event_detect(BUTTON_WAKEUP, GPIO.RISING, callback=wakeup_callback, bouncetime=300)
-
+GPIO.add_event_detect(BUTTON_WAKEUP, GPIO.RISING, callback=wakeup_callback, bouncetime=300)       
 
 def interrupt_callback():
     global interrupted
@@ -143,7 +168,7 @@ async def tts_process_stt():
 
     try:
         if any(item in query for item in obj_xin_chao):
-            answer_text = "Tôi là 1 mô hình ngôn ngữ lớn được đào tạo bởi google. Tôi được thực hiện tại bộ môn điện tử viễn thông, trường cao đẳng kỹ thuật cao thắng. Bạn có thể hỏi tôi lịch công tác tuần, mở nhạc, điều khiển thiết bị, đọc 1 truyện hay hoặc có thể yêu cầu tôi gửi lời chúc tết đến ông bà, bố mẹ, gia đình, sếp, đồng nghiệp, vợ chồng, người yêu hay thầy cô."
+            answer_text = "Tôi là 1 mô hình ngôn ngữ lớn được đào tạo bởi google. Bạn có thể hỏi tôi bất cứ điều gì. Bạn cũng có thể hỏi tôi lịch công tác tuần, mở nhạc, điều khiển thiết bị, đọc 1 truyện hay hoặc có thể yêu cầu tôi gửi lời chúc tết đến ông bà, bố mẹ, gia đình, sếp, đồng nghiệp, vợ chồng, người yêu hay thầy cô."
             text_to_speech(answer_text, "vi")
         elif 'tăng âm lượng' in query:
             subprocess.run(["amixer", "sset", "Playback", "5%+"])
@@ -155,7 +180,7 @@ async def tts_process_stt():
             answer_text = "đã giảm âm lượng thêm 5%"
             text_to_speech(answer_text, "vi") 
             
-        elif any(item in data for item in obj_music):
+        elif any(item in query for item in obj_music):
             song_name = extract_song_name(query)
             #play_m3u8(song_name)
             handle_music_and_lights(song_name, pixels)
@@ -252,6 +277,10 @@ async def detect_keywords(porcupine, audio_stream):
 
             if keyword_index >= 0:
                 await tts_process_stt()
+                
+                #audio_stream.close()
+                #audio_stream = None
+                
             #await asyncio.sleep(0.01)  # Giảm tải CPU
     except Exception as e:
         print(f"Lỗi trong phát hiện từ khóa: {e}")
