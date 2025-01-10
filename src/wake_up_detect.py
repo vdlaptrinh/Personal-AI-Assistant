@@ -46,6 +46,8 @@ button_press_count = 0
 last_button_press_time = 0 
 music_thread = None 
 playing_music = False
+tts_thread = None 
+playing_tts = False
 
 # Đọc tệp JSON chứa từ khóa
 files = ['object.json']
@@ -124,11 +126,30 @@ def handle_music_and_lights(song_name, pixels):
     music_thread.join()
     lights_thread.join()
     playing_music = False
+    
+def handle_tts_and_lights(answer, lang, pixels):
+    global tts_thread, playing_tts
+    """
+    Chạy đồng thời phát nhạc và hiệu ứng đèn.
+    """
+    # Tạo thread cho phát nhạc
+    tts_thread = threading.Thread(target=text_to_speech, args=(answer, lang))
+    # Tạo thread cho hiệu ứng đèn
+    lights_thread = threading.Thread(target=pixels.speak)
 
+    # Bắt đầu cả hai thread
+    tts_thread.start()
+    lights_thread.start()
+    playing_tts = True
+
+    # Chờ cả hai hoàn thành (nếu cần)
+    tts_thread.join()
+    lights_thread.join()
+    playing_tts = False
+    
 # Hàm xử lý khi nút nhấn WAKEUP
-
 def wakeup_callback(channel):
-    global button_press_count, last_button_press_time, playing_music, music_thread
+    global button_press_count, last_button_press_time, playing_music, music_thread, playing_tts, tts_thread
 
     current_time = time.time()
     if current_time - last_button_press_time < 0.5:  # Nếu nhấn lần thứ 2 trong vòng 0.5 giây
@@ -142,6 +163,10 @@ def wakeup_callback(channel):
         if playing_music and music_thread.is_alive():
             subprocess.call(["pkill", "ffplay"])  # Dừng phát nhạc
             playing_music = False
+            pixels.off()
+        elif playing_tts and tts_thread.is_alive():
+            subprocess.call(["pkill", "ffplay"])  # Dừng phát nhạc
+            playing_tts = False
             pixels.off()
         else:
             asyncio.run(tts_process_stt())
@@ -200,7 +225,8 @@ async def tts_process_stt():
         else:
             gemini_result = generate_ai_response(query)
             print("GPT:", gemini_result)
-            text_to_speech(gemini_result, "vi")
+            handle_tts_and_lights(gemini_result, "vi", pixels)
+            #text_to_speech(gemini_result, "vi")
 
     except Exception as e:
         print(f"Lỗi xử lý: {e}")
