@@ -11,7 +11,8 @@ import subprocess
 import time
 import threading
 import RPi.GPIO as GPIO
-from src.speech_to_text import recognize_speech
+#from src.speech_to_text import recognize_speech
+from src.stt_gg_cloud_v1 import stt_process
 from src.text_to_speech import text_to_speech
 from src.config import porcupine_access_key
 from src.config import gemini_key
@@ -152,6 +153,7 @@ def wakeup_callback(channel):
     global button_press_count, last_button_press_time, playing_music, music_thread, playing_tts, tts_thread
 
     current_time = time.time()
+    
     if current_time - last_button_press_time < 0.5:  # Nếu nhấn lần thứ 2 trong vòng 0.5 giây
         button_press_count += 1
     else:
@@ -186,7 +188,8 @@ async def tts_process_stt():
     #os.system(f"aplay /home/pi/Personal-AI-Assistant/wake_up_sound.wav")
     subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/ding.mp3"])
     #print("Hey Siri detected! Recognizing speech...")
-    query = recognize_speech()
+    #query = recognize_speech()
+    query = stt_process()
     pixels.think()
     data = split_into_chunks(query)
     answer_text = 'Không có câu trả lời cho tình huống này'
