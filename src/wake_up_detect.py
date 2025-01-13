@@ -210,8 +210,8 @@ async def tts_process_stt():
             
         elif any(item in query for item in obj_music):
             song_name = extract_song_name(query)
-            #play_m3u8(song_name)
-            handle_music_and_lights(song_name, pixels)
+            play_m3u8(song_name)
+            #handle_music_and_lights(song_name, pixels)
 
         elif any(item in data for item in obj_work_calendar):
             lich_lam_viec(query)
