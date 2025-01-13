@@ -49,6 +49,7 @@ music_thread = None
 playing_music = False
 tts_thread = None 
 playing_tts = False
+music_path = None
 
 # Đọc tệp JSON chứa từ khóa
 files = ['object.json']
@@ -108,33 +109,14 @@ def extract_song_name(text):
         return match.group(2).strip()
     return 'Mộng hoa sim'
     
-def handle_music_and_lights(song_name, pixels):
-    global music_thread, playing_music
-    """
-    Chạy đồng thời phát nhạc và hiệu ứng đèn.
-    """
-    # Tạo thread cho phát nhạc
-    music_thread = threading.Thread(target=play_m3u8, args=(song_name,))
-    # Tạo thread cho hiệu ứng đèn
-    lights_thread = threading.Thread(target=pixels.speak)
-
-    # Bắt đầu cả hai thread
-    music_thread.start()
-    lights_thread.start()
-    playing_music = True
-
-    # Chờ cả hai hoàn thành (nếu cần)
-    music_thread.join()
-    lights_thread.join()
-    playing_music = False
     
-def handle_tts_and_lights(answer, lang, pixels):
+def handle_tts_and_lights(answer, lang, pixels, music_path):
     global tts_thread, playing_tts
     """
     Chạy đồng thời phát nhạc và hiệu ứng đèn.
     """
     # Tạo thread cho phát nhạc
-    tts_thread = threading.Thread(target=text_to_speech, args=(answer, lang))
+    tts_thread = threading.Thread(target=text_to_speech, args=(answer, lang, music_path))
     # Tạo thread cho hiệu ứng đèn
     lights_thread = threading.Thread(target=pixels.speak)
 
@@ -147,6 +129,7 @@ def handle_tts_and_lights(answer, lang, pixels):
     tts_thread.join()
     lights_thread.join()
     playing_tts = False
+    
     
 # Hàm xử lý khi nút nhấn WAKEUP
 def wakeup_callback(channel):
@@ -193,49 +176,51 @@ async def tts_process_stt():
     pixels.think()
     data = split_into_chunks(query)
     answer_text = 'Không có câu trả lời cho tình huống này'
-
+    music_path = None
     try:
         if any(item in query for item in obj_xin_chao):
             answer_text = "Tôi là 1 mô hình ngôn ngữ lớn được đào tạo bởi google. Bạn có thể hỏi tôi bất cứ điều gì. Bạn cũng có thể hỏi tôi lịch công tác tuần, mở nhạc, điều khiển thiết bị, đọc 1 truyện hay hoặc có thể yêu cầu tôi gửi lời chúc tết đến ông bà, bố mẹ, gia đình, sếp, đồng nghiệp, vợ chồng, người yêu hay thầy cô."
-            text_to_speech(answer_text, "vi")
+
+            #text_to_speech(answer_text, "vi")
         elif 'tăng âm lượng' in query:
             subprocess.run(["amixer", "sset", "Playback", "5%+"])
             answer_text = "đã tăng âm lượng thêm 5%"
-            text_to_speech(answer_text, "vi")
+
+            #text_to_speech(answer_text, "vi")
             
         elif 'giảm âm lượng' in query:
             subprocess.run(["amixer", "sset", "Playback", "5%-"])
             answer_text = "đã giảm âm lượng thêm 5%"
-            text_to_speech(answer_text, "vi") 
+  
+            #text_to_speech(answer_text, "vi") 
             
         elif any(item in query for item in obj_music):
             song_name = extract_song_name(query)
-            play_m3u8(song_name)
-            #handle_music_and_lights(song_name, pixels)
+            answer_text, music_path = play_m3u8(song_name)
 
         elif any(item in data for item in obj_work_calendar):
-            lich_lam_viec(query)
-            
-        elif any(item in data for item in obj_truyen_vui):
-            doc_truyen()
-            
-        elif any(item in data for item in obj_chuc_tet):
-            chuc_tet(query)
-            
-        elif any(item in query for item in obj_hass):
-            hass_process(query)
-            
-        else:
-            gemini_result = generate_ai_response(query)
-            print("GPT:", gemini_result)
-            handle_tts_and_lights(gemini_result, "vi", pixels)
-            #text_to_speech(gemini_result, "vi")
+            answer_text = lich_lam_viec(query)
 
+        elif any(item in data for item in obj_truyen_vui):
+            answer_text = doc_truyen()
+
+        elif any(item in data for item in obj_chuc_tet):
+            answer_text = chuc_tet(query)
+
+        elif any(item in query for item in obj_hass):
+            answer_text = hass_process(query)
+
+        else:
+            answer_text = generate_ai_response(query)
+            print("GPT:", answer_text)
+
+            
     except Exception as e:
         print(f"Lỗi xử lý: {e}")
         answer_text = 'Không nhận dạng được câu lệnh'
-        text_to_speech(answer_text, "vi")
-    subprocess.call(["ffplay", "-nodisp", "-autoexit", "/home/pi/Personal-AI-Assistant/sounds/dong.mp3"])
+        text_to_speech(answer_text, "vi", music_path)
+    handle_tts_and_lights(answer_text, "vi", pixels, music_path)
+    subprocess.call(["ffplay", "-nodisp", "-autoexit", "sounds/dong.mp3"])
     pixels.off()
 
 # Chương trình chính
@@ -243,11 +228,12 @@ async def wake_up_detect():
     #signal.signal(signal.SIGINT, signal_handler)
     #subprocess.run(["amixer", "sset", "Playback", "30%-"])
 
-    keyword_path = "/home/pi/Personal-AI-Assistant/models/hey_siri_raspberry-pi.ppn"
+    keyword_path = "models/hey_siri_raspberry-pi.ppn"
 
     porcupine = None
     audio_stream = None
     pa = None
+    
 
     try:
         porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=[keyword_path])
@@ -275,7 +261,7 @@ async def wake_up_detect():
         #subprocess.run(["amixer", "sset", "Playback", "65%"])
         #text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi", "output_file.mp3")
         pixels.speak()
-        text_to_speech("Xin chào, mời bạn ra khẩu lệnh.", "vi")
+        text_to_speech("Xin chào, mời bạn đánh thức và ra khẩu lệnh.", "vi", music_path)
         pixels.off()
         # Chạy vòng lặp phát hiện từ khóa và kiểm tra nút nhấn song song
         await detect_keywords(porcupine, audio_stream)
