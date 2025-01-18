@@ -1,16 +1,17 @@
-from lib_process import threading,time,Color,PixelStrip,random,colorsys
+import threading,time,random,colorsys
+from rpi_ws281x import PixelStrip, Color
 state_data = 'OFF'
-class Led():    
-    def __init__(self,config_data):
-        effect_mode=config_data['smart_config']['led']['effect_mode']    
-        LED_COUNT =config_data['smart_config']['led']['number_led']                
-        LED_BRIGHTNESS =config_data['smart_config']['led']['brightness']                
-        LED_PIN =config_data['smart_config']['led']['led_gpio']                
-        wakeup_color=config_data['smart_config']['led']['wakeup_color']                
-        muted_color=config_data['smart_config']['led']['muted_color']        
-        listen_effect=config_data['smart_config']['led']['listen_effect']
-        think_effect=config_data['smart_config']['led']['think_effect']
-        speak_effect=config_data['smart_config']['led']['speak_effect']
+class Led:    
+    def __init__(self):
+        #effect_mode=led_ws2812   
+        LED_COUNT=12                
+        LED_BRIGHTNESS= 125           
+        LED_PIN=10                
+        wakeup_color="11801e"               
+        muted_color="FF6333"       
+        listen_effect=1
+        think_effect=2
+        speak_effect=3
 
 # Define LED strip parameters
         LED_FREQ_HZ = 800000
