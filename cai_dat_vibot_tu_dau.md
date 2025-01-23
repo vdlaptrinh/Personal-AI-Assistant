@@ -4,13 +4,13 @@
 
 1.1. Chờ Pi boot up xong, xác định IP của Pi từ Modem, Access Point hoặc các phần mềm quét IP có hiển thị hostname
 
-1.2. Sử dụng các phần mêm SSH như putty/Securec CRT truy cập ssh vào địa chỉ IP của Pi với 
+1.2. Sử dụng các phần mêm SSH như putty/Securec CRT truy cập ssh vào địa chỉ IP của Pi
 
 ```sh
-username: pi
-password: vbot123
+username: ...
+password: ...
 ```
-username và password như trên nếu bạn dùng image ở link https://drive.google.com/drive/u/0/folders/1rB3P8rev2byxgRsXS7mAdkKRj7j0M4xZ
+
 ### STEP2. Cài đặt môi trường
 
 2.1. Nâng cấp gói
@@ -70,10 +70,14 @@ và
 ```sh
 sudo apt-get install python3 python3-pip python3-venv python3-dev python3-rpi.gpio python3-pyaudio
 ```
+và
+```sh
+sudo apt-get install ffmpeg flac portaudio19-dev
+```
 
 3.2. Tạo env
 ```sh
-python3 -m venv vietbot_env
+python3 -m venv vibot_env
 ```
 3.3. Chạy Env
 ```sh
@@ -81,7 +85,7 @@ source vibot_env/bin/activate
 ```
 Nếu ra dấu nhắc lệnh như sau:
 ```sh
-(vibot_env) pi@vietbot32:~ 
+(vibot_env) pi@vibot64:~ 
 ```
 là thành công
 
