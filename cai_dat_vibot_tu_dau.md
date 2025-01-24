@@ -97,7 +97,15 @@ pip install -U google-generativeai
 ```sh
 pip install pvporcupine PyAudio RPi.GPIO SpeechRecognition edge_tts yt_dlp spidev beautifulsoup4 requests
 ```
-### STEP4. Cài đặt & Chạy vietbot
+
+Nếu dùng phím bấm cần cài đặt, nếu không dùng bỏ qua
+```sh
+sudo apt-get install python3-rpi.gpio 
+pip install pigpio RPi.GPIO lgpio gpiozero
+```
+
+
+### STEP4. Cài đặt & Chạy vibot
 
 4.1. Download code vietbot từ github
 ```sh
